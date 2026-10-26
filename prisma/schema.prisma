@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model WebSetting {
+  id            Int      @id @default(autoincrement())
+  site_name     String
+  server        String
+  api_connector String
+  head_code     String?
+  footer_code   String?
+  seo_title_1   String?
+  seo_title_2   String?
+  seo_desc_1    String?
+  seo_desc_2    String?
+  create_at     DateTime @default(now())
+  update_at     DateTime @updatedAt
+
+  @@map("web_setting")
+}
+
+enum OrderStatus {
+  Pending
+  Progress
+  InProgress @map("In-Progress")
+  Completed
+  Cancel
+  Partial
+}
+
+model HistoryOrder {
+  id                Int         @id @default(autoincrement())
+  uuid_user         String
+  uuid_service_name String
+  order_id          String
+  service_name      String
+  rate_api          Decimal     @db.Decimal(10, 2)
+  rate_order        Decimal     @db.Decimal(10, 2)
+  status            OrderStatus @default(Pending)
+  invoice           String
+  start             Int         @default(0)
+  remains           Int         @default(0)
+  amount_order      Decimal     @db.Decimal(10, 2)
+  create_at         DateTime    @default(now())
+  update_at         DateTime    @updatedAt
+
+  @@map("history_order")
+}
